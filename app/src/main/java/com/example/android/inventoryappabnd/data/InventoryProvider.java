@@ -48,21 +48,21 @@ public class InventoryProvider extends ContentProvider {
             case INVENTORY_ITEM_ID:
                 selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
-                cursor = sqLiteDatabase.query(InventoryEntry.TABLE_NAME, null,
+                cursor = sqLiteDatabase.query(InventoryEntry.TABLE_NAME, projection,
                         selection,
                         selectionArgs,
                         null,
                         null,
-                        null);
+                        sortOrder);
                 break;
             case INVENTORY_ITEMS:
                 cursor = sqLiteDatabase.query(InventoryEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
                         null,
                         null,
-                        null,
-                        null,
-                        null,
-                        null);
+                        sortOrder);
                 break;
                 default:
                     throw new IllegalArgumentException("uri");
