@@ -1,14 +1,19 @@
 package com.example.android.inventoryappabnd;
 
 import android.app.LoaderManager;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
@@ -32,12 +37,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         ButterKnife.bind(this);
 
 
-        //insertTestRecords();
+        insertTestRecords();
 
         inventoryAdapter = new InventoryAdapter(this, null);
         listView.setAdapter(inventoryAdapter);
         getLoaderManager().initLoader(1,null, this);
 
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(MainActivity.this, ItemActivity.class);
+                Uri itemUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
+                intent.setData(itemUri);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
