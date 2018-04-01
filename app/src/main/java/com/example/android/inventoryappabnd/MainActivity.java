@@ -2,12 +2,14 @@ package com.example.android.inventoryappabnd;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.android.inventoryappabnd.InventoryContract.InventoryEntry;
+import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
+import com.example.android.inventoryappabnd.data.InventoryDbHelper;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -23,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         insertTestRecords();
         readTestRecords();
-        deleteTestRecords();
+       // deleteTestRecords();
     }
 
     private void insertTestRecords() {
@@ -44,49 +46,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void readTestRecords() {
 
-        String[] projection = {InventoryEntry._ID,
+        String[] projection = {
                 InventoryEntry.COLUMN_PRODUCT_NAME,
                 InventoryEntry.COLUMN_PRICE,
-                InventoryEntry.COLUMN_QUANTITY,
-                InventoryEntry.COLUMN_SUPPLIER_NAME,
-                InventoryEntry.COLUMN_SUPPLIER_PHONE};
+                InventoryEntry.COLUMN_QUANTITY};
+        Log.i(LOG_TAG, "projection = " + projection );
 
-        SQLiteDatabase sqLiteDatabase = inventoryDbHelper.getReadableDatabase();
-        Cursor cursor = sqLiteDatabase.query(InventoryEntry.TABLE_NAME,
-                projection,
-                null,
-                null,
-                null,
-                null,
-                null);
+        Cursor cursor = getContentResolver().query(InventoryEntry.CONTENT_URI,
+                projection, null, null, null);
 
-        try {
-            int idColumnIndex = cursor.getColumnIndex(InventoryEntry._ID);
-            int nameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME);
-            int priceColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_PRICE);
-            int quantityColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_QUANTITY);
-            int supplierNameColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_NAME);
-            int supplierPhoneColumnIndex = cursor.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_PHONE);
-
-            while (cursor.moveToNext()) {
-                String id = cursor.getString(idColumnIndex);
-                String productName = cursor.getString(nameColumnIndex);
-                String price = cursor.getString(priceColumnIndex);
-                String quantity = cursor.getString(quantityColumnIndex);
-                String supplierName = cursor.getString(supplierNameColumnIndex);
-                String supplierPhone = cursor.getString(supplierPhoneColumnIndex);
-
-                Log.i(LOG_TAG, "id " + id
-                        + "; productName " + productName
-                        + "; price " + price
-                        + "; quantity " + quantity
-                        + "; supplierName " + supplierName
-                        + "; supplierPhone " + supplierPhone);
-            }
-        } finally {
+        Log.i(LOG_TAG, "getContentResolver = " + InventoryEntry.CONTENT_URI +
+                projection );
+            Log.i(LOG_TAG, DatabaseUtils.dumpCursorToString(cursor));
             cursor.close();
-            sqLiteDatabase.close();
-        }
     }
 
     private void deleteTestRecords() {

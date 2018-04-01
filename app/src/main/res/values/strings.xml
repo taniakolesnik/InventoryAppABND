@@ -3,4 +3,6 @@
     <string name="product_name">Test Product </string>
     <string name="supplier_name">Test Supplier </string>
     <string name="test_records_deleted_message">Start</string>
+
+    <string name="cannot_match_uri_exception">Cannot match uri</string>
 </resources>

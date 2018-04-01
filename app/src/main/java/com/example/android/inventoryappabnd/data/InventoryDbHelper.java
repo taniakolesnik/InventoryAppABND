@@ -1,11 +1,11 @@
-package com.example.android.inventoryappabnd;
+package com.example.android.inventoryappabnd.data;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.example.android.inventoryappabnd.InventoryContract.InventoryEntry;
+import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
 
 /**
  * Created by tetianakolesnik on 21/03/2018.
@@ -17,6 +17,7 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
 
     private final static String DATABASE_NAME = "InventoryRecords";
     private final static int DATABASE_VERSION = 1;
+
 
     private final String COMMA = " , ";
     private static final String INTEGER_DEFAULT_0 = " INTEGER DEFAULT 0";
