@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
 
@@ -65,7 +66,7 @@ public class InventoryProvider extends ContentProvider {
                         sortOrder);
                 break;
                 default:
-                    throw new IllegalArgumentException("uri");
+                    throw new IllegalArgumentException("match error");
         }
         return cursor;
     }
@@ -79,12 +80,31 @@ public class InventoryProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
-        return null;
+        SQLiteDatabase sqLiteDatabase = inventoryDbHelper.getWritableDatabase();
+        long newItemId = sqLiteDatabase.insert(InventoryEntry.TABLE_NAME, null, values);
+        Uri newITemUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, newItemId);
+       //TODO turn on Toast.makeText(getContext(), "New item added. id: ",Toast.LENGTH_SHORT).show();
+        return newITemUri;
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        int rowsDeleted;
+        SQLiteDatabase sqLiteDatabase = inventoryDbHelper.getWritableDatabase();
+        int match = uriMatcher.match(uri);
+        switch (match){
+            case INVENTORY_ITEM_ID:
+                selection = InventoryEntry._ID + "?=";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = sqLiteDatabase.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case INVENTORY_ITEMS:
+                rowsDeleted = sqLiteDatabase.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("match error");
+        }
+        return rowsDeleted;
     }
 
     @Override
