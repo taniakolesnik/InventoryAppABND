@@ -7,4 +7,6 @@
     <string name="cannot_match_uri_exception">Cannot match uri</string>
     <string name="quantity_list">Q: </string>
     <string name="price_list">Price: </string>
+    <string name="delete_all_menu_text">Delete all items</string>
+    <string name="add_new_item_menu_text">Add new item</string>
 </resources>

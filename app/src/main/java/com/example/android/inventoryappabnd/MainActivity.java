@@ -7,6 +7,8 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
@@ -29,16 +31,35 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        insertTestRecords();
+
+        //insertTestRecords();
 
         inventoryAdapter = new InventoryAdapter(this, null);
         listView.setAdapter(inventoryAdapter);
         getLoaderManager().initLoader(1,null, this);
 
-       // deleteTestRecords();
     }
 
-    private void deleteTestRecords() {
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.addNew_menu:
+                break;
+            case R.id.deleteAll_menu:
+                deleteAllRecords();
+                break;
+        }
+        return true;
+    }
+
+
+    private void deleteAllRecords() {
         getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
     }
 
