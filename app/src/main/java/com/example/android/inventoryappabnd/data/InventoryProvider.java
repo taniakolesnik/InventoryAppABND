@@ -7,11 +7,11 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.android.inventoryappabnd.R;
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
 
 /**
@@ -68,24 +68,55 @@ public class InventoryProvider extends ContentProvider {
                 default:
                     throw new IllegalArgumentException("query UriMatch error");
         }
+        cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
     }
 
-    @Nullable
     @Override
     public String getType(Uri uri) {
         return null;
     }
 
-    @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues values) {
+        int match = uriMatcher.match(uri);
+        switch (match){
+            case INVENTORY_ITEMS:
+                return insertItem(uri, values);
+            default:
+                throw new IllegalArgumentException("Cannot insert for URI " + uri);
+        }
+    }
+
+    private Uri insertItem(Uri uri, ContentValues values) {
+
+        String name = values.getAsString(InventoryEntry.COLUMN_PRODUCT_NAME);
+        Integer price = values.getAsInteger(InventoryEntry.COLUMN_PRICE);
+        Integer quantity = values.getAsInteger(InventoryEntry.COLUMN_QUANTITY);
+        String supplier = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_NAME);
+        String supplierContact = values.getAsString(InventoryEntry.COLUMN_SUPPLIER_PHONE);
+
+        if (TextUtils.isEmpty(name) || name == null
+                || price == null
+                || quantity == null
+                || TextUtils.isEmpty(supplier) || supplierContact == null) {
+            throw new IllegalArgumentException(getContext().getString(R.string.error_cannot_be_empty));
+        }
+
+        if (price < 0 || quantity < 0){
+            throw new IllegalArgumentException(getContext().getString(R.string.error_negative_value));
+        }
+
         SQLiteDatabase sqLiteDatabase = inventoryDbHelper.getWritableDatabase();
         long newItemId = sqLiteDatabase.insert(InventoryEntry.TABLE_NAME, null, values);
+        if (newItemId == -1) {
+            Log.e(LOG_TAG, "Insert failed " + uri);
+            return null;
+        }
         Uri newITemUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, newItemId);
-        Toast.makeText(getContext(), "New item added. id: ",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "New item added. id: " + newItemId,Toast.LENGTH_SHORT).show();
+        getContext().getContentResolver().notifyChange(uri, null);
         return newITemUri;
-
     }
 
     @Override
@@ -104,6 +135,9 @@ public class InventoryProvider extends ContentProvider {
                 break;
             default:
                 throw new IllegalArgumentException("delete UriMatch error");
+        }
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsDeleted;
     }
@@ -124,6 +158,9 @@ public class InventoryProvider extends ContentProvider {
                 break;
                 default:
                     throw new IllegalArgumentException("update UriMatch error");
+        }
+        if (rowsUpdated != 0){
+            getContext().getContentResolver().notifyChange(uri, null);
         }
         return rowsUpdated;
     }
