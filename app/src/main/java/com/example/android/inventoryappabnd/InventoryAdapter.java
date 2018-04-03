@@ -16,14 +16,13 @@ import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntr
 
 class InventoryAdapter extends CursorAdapter{
 
-    public static final String LOG_TAG = InventoryAdapter.class.getName();
     public InventoryAdapter(Context context, Cursor c) {
         super(context, c, 0);
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
-        return LayoutInflater.from(context).inflate(R.layout.inventory_item, parent, false);
+        return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
     }
 
     @Override

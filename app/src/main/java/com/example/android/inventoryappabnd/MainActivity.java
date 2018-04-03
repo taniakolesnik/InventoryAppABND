@@ -23,9 +23,6 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
-
-    public static final String LOG_TAG = MainActivity.class.getName();
-    private static final int TABLE_RECORDS = 10;
     InventoryAdapter inventoryAdapter;
 
     @BindView(R.id.list_view) ListView listView;
@@ -35,9 +32,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
-
-        insertTestRecords();
 
         inventoryAdapter = new InventoryAdapter(this, null);
         listView.setAdapter(inventoryAdapter);
@@ -64,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.addNew_menu:
+                insertItem();
                 break;
             case R.id.deleteAll_menu:
                 deleteAllRecords();
@@ -72,24 +67,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return true;
     }
 
+    private void insertItem() {
+        Intent intent = new Intent(MainActivity.this, ItemActivity.class);
+        startActivity(intent);
+    }
 
     private void deleteAllRecords() {
         getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
     }
-
-    private void insertTestRecords() {
-
-        for (int i = 10; i <= TABLE_RECORDS*4; i++) {
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(InventoryEntry.COLUMN_PRODUCT_NAME, getString(R.string.product_name) + i);
-            contentValues.put(InventoryEntry.COLUMN_PRICE, i + i);
-            contentValues.put(InventoryEntry.COLUMN_QUANTITY, i);
-            contentValues.put(InventoryEntry.COLUMN_SUPPLIER_NAME, getString(R.string.supplier_name) + i);
-            contentValues.put(InventoryEntry.COLUMN_SUPPLIER_PHONE, i + "-" + i + i + i + i + i + "-" + i + i);
-            getContentResolver().insert(InventoryEntry.CONTENT_URI, contentValues);
-        }
-    }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

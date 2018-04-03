@@ -66,7 +66,7 @@ public class InventoryProvider extends ContentProvider {
                         sortOrder);
                 break;
                 default:
-                    throw new IllegalArgumentException("match error");
+                    throw new IllegalArgumentException("query UriMatch error");
         }
         return cursor;
     }
@@ -83,8 +83,9 @@ public class InventoryProvider extends ContentProvider {
         SQLiteDatabase sqLiteDatabase = inventoryDbHelper.getWritableDatabase();
         long newItemId = sqLiteDatabase.insert(InventoryEntry.TABLE_NAME, null, values);
         Uri newITemUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, newItemId);
-       //TODO turn on Toast.makeText(getContext(), "New item added. id: ",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "New item added. id: ",Toast.LENGTH_SHORT).show();
         return newITemUri;
+
     }
 
     @Override
@@ -102,13 +103,28 @@ public class InventoryProvider extends ContentProvider {
                 rowsDeleted = sqLiteDatabase.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
-                throw new IllegalArgumentException("match error");
+                throw new IllegalArgumentException("delete UriMatch error");
         }
         return rowsDeleted;
     }
 
     @Override
     public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
-        return 0;
+        int rowsUpdated;
+        SQLiteDatabase sqLiteDatabase = inventoryDbHelper.getWritableDatabase();
+        int match = uriMatcher.match(uri);
+        switch (match){
+            case INVENTORY_ITEM_ID:
+                selection = InventoryEntry._ID + "=?";
+                selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
+                rowsUpdated = sqLiteDatabase.update(InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case INVENTORY_ITEMS:
+                rowsUpdated = sqLiteDatabase.update(InventoryEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+                default:
+                    throw new IllegalArgumentException("update UriMatch error");
+        }
+        return rowsUpdated;
     }
 }
