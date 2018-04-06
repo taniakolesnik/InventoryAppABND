@@ -14,7 +14,6 @@
     <string name="error_cannot_be_empty">Cannot be empty</string>
     <string name="error_negative_value">Cannot be negative</string>
     <string name="error_not_number">Numbers only</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_activity_title">Edit</string>
+    <string name="add_activity_title">Add</string>
 </resources>

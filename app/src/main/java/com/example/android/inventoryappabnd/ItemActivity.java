@@ -8,6 +8,7 @@ import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -46,6 +47,9 @@ public class ItemActivity extends AppCompatActivity implements LoaderManager.Loa
         itemUri = getIntent().getData();
         if (itemUri != null) {
             getLoaderManager().initLoader(ITEM_LOADER_ID, null, this);
+            setTitle(getString(R.string.edit_activity_title));
+        } else {
+            setTitle(getString(R.string.add_activity_title));
         }
     }
 

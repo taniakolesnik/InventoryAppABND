@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ import butterknife.ButterKnife;
 public class AvailableItemsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     InventoryAdapter inventoryAdapter;
+    public boolean inStock;
 
     @BindView(R.id.list_view)
     ListView listView;
@@ -37,7 +39,8 @@ public class AvailableItemsFragment extends Fragment implements LoaderManager.Lo
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_layout, container, false);
         ButterKnife.bind(this, rootView);
-
+        inStock = getArguments().getBoolean("inStock");
+        Log.i("mm",  String.valueOf(inStock));
         inventoryAdapter = new InventoryAdapter(getActivity(), null);
         listView.setAdapter(inventoryAdapter);
         getLoaderManager().initLoader(1,null, this);
@@ -63,8 +66,15 @@ public class AvailableItemsFragment extends Fragment implements LoaderManager.Lo
                 InventoryEntry.COLUMN_PRODUCT_NAME,
                 InventoryEntry.COLUMN_PRICE,
                 InventoryEntry.COLUMN_QUANTITY};
+
+        String selection = null;
+        if (!inStock) {
+            selection = InventoryEntry.COLUMN_QUANTITY + "=0";
+        }
+
         return new android.support.v4.content.CursorLoader(getActivity(), InventoryEntry.CONTENT_URI,
-                projection, null, null, null);
+                projection, selection, null, null);
+
     }
 
     @Override
