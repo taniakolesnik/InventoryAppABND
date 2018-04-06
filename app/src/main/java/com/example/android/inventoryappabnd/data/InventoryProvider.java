@@ -126,7 +126,7 @@ public class InventoryProvider extends ContentProvider {
         int match = uriMatcher.match(uri);
         switch (match){
             case INVENTORY_ITEM_ID:
-                selection = InventoryEntry._ID + "?=";
+                selection = InventoryEntry._ID + "=?";
                 selectionArgs = new String[] {String.valueOf(ContentUris.parseId(uri))};
                 rowsDeleted = sqLiteDatabase.delete(InventoryEntry.TABLE_NAME, selection, selectionArgs);
                 break;

@@ -17,12 +17,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ItemDetailsActivity"
-            android:parentActivityName="com.example.android.inventoryappabnd.MainActivity" >
-            <!-- Parent activity meta-data to support 4.0 and lower -->
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.android.inventoryappabnd.MainActivity" />
+        <activity android:name=".ItemDetailsActivity">
         </activity>
         <provider android:name="com.example.android.inventoryappabnd.data.InventoryProvider"
             android:authorities="com.example.android.inventoryappabnd">

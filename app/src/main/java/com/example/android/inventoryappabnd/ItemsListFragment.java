@@ -1,5 +1,6 @@
 package com.example.android.inventoryappabnd;
 
+import android.graphics.Color;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.content.ContentUris;
@@ -40,6 +41,7 @@ public class ItemsListFragment extends Fragment implements LoaderManager.LoaderC
         View rootView = inflater.inflate(R.layout.fragment_list_layout, container, false);
         ButterKnife.bind(this, rootView);
         inStock = getArguments().getBoolean("inStock");
+
         Log.i("mm",  String.valueOf(inStock));
         inventoryAdapter = new InventoryAdapter(getActivity(), null);
         listView.setAdapter(inventoryAdapter);

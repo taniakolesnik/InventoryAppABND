@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.design.widget.TabLayout;
 
+import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
+
 public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
     }
 
     //TODO add fab icon to add new item
@@ -42,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
                 insertItem();
                 break;
             case R.id.deleteAll_menu:
-               // TODO add deleteAllRecords() and confirmation pop up;
+                deleteAllRecords();
+                // TODO add confirmation pop up;
                 break;
         }
         return true;
@@ -97,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
             return tabName;
         }
     }
-//
-//    private void deleteAllRecords() {
-//        getActivity().getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
-//    }
+
+    private void deleteAllRecords() {
+        getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
+    }
 }

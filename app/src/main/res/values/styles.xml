@@ -8,4 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Base application theme. -->
+    <style name="ListStyle" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:paddingLeft">@dimen/list_item_left_padding</item>
+        <item name="android:paddingRight">@dimen/list_item_right_padding</item>
+        <item name="android:paddingTop">@dimen/minimum_padding</item>
+        <item name="android:paddingBottom">@dimen/minimum_padding</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
 </resources>

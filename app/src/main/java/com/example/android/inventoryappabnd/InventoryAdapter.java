@@ -34,8 +34,11 @@ class InventoryAdapter extends CursorAdapter{
         TextView nameView = view.findViewById(R.id.item_name_view);
         TextView detailsView = view.findViewById(R.id.details_view);
 
+        nameView.setBackgroundResource(R.color.colorName);
+        detailsView.setBackgroundResource(R.color.colorDetails);
+
         nameView.setText(name);
-        detailsView.setText(context.getString(R.string.quantity_list) + quantity
+        detailsView.setText(context.getString(R.string.quantity_list) + quantity + " "
                 + context.getString(R.string.price_list) + price);
 
     }

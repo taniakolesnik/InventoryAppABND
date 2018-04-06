@@ -64,7 +64,22 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
             setTitle(getString(R.string.edit_activity_title));
         } else {
             setTitle(getString(R.string.add_activity_title));
+            invalidateOptionsMenu();
         }
+    }
+
+
+//
+//    @Override
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        if (itemUri==null){
+            MenuItem menuItem = menu.findItem(R.id.deleteItem_menu);
+            menuItem.setVisible(false);
+        }
+        return true;
     }
 
     @Override
@@ -80,10 +95,17 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
                 saveItem();
                 break;
             case R.id.deleteItem_menu:
-                //TODO add delete item
+                deleteRecord();
+                // TODO add confirmation pop up;
                 break;
         }
         return true;
+    }
+
+    private void deleteRecord() {
+        getContentResolver().delete(itemUri, null, null);
+        Intent intent = new Intent(ItemDetailsActivity.this, MainActivity.class);
+        startActivity(intent);
     }
 
     private void saveItem() {
