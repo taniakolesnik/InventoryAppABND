@@ -11,8 +11,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.support.design.widget.TabLayout;
 
-import butterknife.ButterKnife;
-
 public class MainActivity extends AppCompatActivity {
 
     ViewPager viewPager;
@@ -29,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
+    //TODO add fab icon to add new item
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -43,14 +42,14 @@ public class MainActivity extends AppCompatActivity {
                 insertItem();
                 break;
             case R.id.deleteAll_menu:
-               // deleteAllRecords();
+               // TODO add deleteAllRecords() and confirmation pop up;
                 break;
         }
         return true;
     }
 
     private void insertItem() {
-        Intent intent = new Intent(MainActivity.this, ItemActivity.class);
+        Intent intent = new Intent(MainActivity.this, ItemDetailsActivity.class);
         startActivity(intent);
     }
 
@@ -63,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            Fragment fragment = new AvailableItemsFragment();
+            Fragment fragment = new ItemsListFragment();
             Bundle args = new Bundle();
             switch (position) {
                 case 0:

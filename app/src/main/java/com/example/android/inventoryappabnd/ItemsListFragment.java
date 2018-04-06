@@ -22,7 +22,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class AvailableItemsFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class ItemsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
     InventoryAdapter inventoryAdapter;
     public boolean inStock;
@@ -30,14 +30,14 @@ public class AvailableItemsFragment extends Fragment implements LoaderManager.Lo
     @BindView(R.id.list_view)
     ListView listView;
 
-    public AvailableItemsFragment() {
+    public ItemsListFragment() {
         // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_layout, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_list_layout, container, false);
         ButterKnife.bind(this, rootView);
         inStock = getArguments().getBoolean("inStock");
         Log.i("mm",  String.valueOf(inStock));
@@ -48,7 +48,7 @@ public class AvailableItemsFragment extends Fragment implements LoaderManager.Lo
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getActivity(), ItemActivity.class);
+                Intent intent = new Intent(getActivity(), ItemDetailsActivity.class);
                 Uri itemUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
                 intent.setData(itemUri);
                 startActivity(intent);
@@ -67,7 +67,7 @@ public class AvailableItemsFragment extends Fragment implements LoaderManager.Lo
                 InventoryEntry.COLUMN_PRICE,
                 InventoryEntry.COLUMN_QUANTITY};
 
-        String selection = null;
+        String selection = InventoryEntry.COLUMN_QUANTITY + "!=0";
         if (!inStock) {
             selection = InventoryEntry.COLUMN_QUANTITY + "=0";
         }
