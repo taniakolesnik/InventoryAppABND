@@ -39,7 +39,9 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
 
     Uri itemUri;
     private static final int ITEM_LOADER_ID = 1;
+    private int itemsToAdd = 0;
     private int itemsToSell = 0;
+    private static final int MAX_ITEMS_TO_ADD = 10;
 
 
     @BindView(R.id.item_name_edit) EditText nameEditText;
@@ -48,6 +50,9 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
     @BindView(R.id.item_supplier_edit) EditText supplierEditText;
     @BindView(R.id.item_supplier_contact_edit) EditText supplierContactEditText;
     @BindView(R.id.sell_button) Button sellButton;
+    @BindView(R.id.add_items_button) Button addButton;
+    @BindView(R.id.spinner_item_to_sell) Spinner spinnerSell;
+    @BindView(R.id.spinner_item_to_add) Spinner spinnerAdd;
 
 
     @Override
@@ -68,9 +73,6 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
         }
     }
 
-
-//
-//    @Override
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -143,7 +145,6 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
          * Quantity
          */
         String quantityString = quantityEditText.getText().toString();
-        Log.i("Save quantityString", quantityString);
         try {
             quantity = Integer.parseInt(quantityEditText.getText().toString());
             if (quantity < 0) {
@@ -218,38 +219,31 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
             supplierContactEditText.setText(supplierContact);
         }
 
-        if (quantity != 0) {
-            addSellOption(quantity);
-            Log.i(LOG_TAG, "addSellOption initiated...");
-        }
+            changeQuantityStock(quantity);
     }
 
-    private void addSellOption(int quantity) {
-
-        Log.i(LOG_TAG, "addSellOption started...");
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_item_sold);
+    private void changeQuantityStock(int quantity) {
 
         final int currentQuantity = quantity;
-        sellButton.setVisibility(View.VISIBLE);
-        spinner.setVisibility(View.VISIBLE);
-
-        ArrayList spinnerArrayList;
-        spinnerArrayList = new ArrayList<String>();
-        for (int i = 1; i <= currentQuantity; i++){
-            spinnerArrayList.add(i);
+        if (quantity != 0) {
+            sellButton.setVisibility(View.VISIBLE);
+            spinnerSell.setVisibility(View.VISIBLE);
         }
-        Log.i(LOG_TAG, "ArrayList spinnerArrayList is " + String.valueOf(spinnerArrayList));
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, spinnerArrayList);
-        Log.i(LOG_TAG, "arrayAdapter is set up ");
+        /**
+         *  Sell items
+         */
+        ArrayList spinnerSellArrayList;
+        spinnerSellArrayList = new ArrayList<String>();
+        for (int i = 1; i <= currentQuantity; i++){
+            spinnerSellArrayList.add(i);
+        }
 
-        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Log.i(LOG_TAG, "setDropDownViewResource is set up ");
-
-        spinner.setAdapter(arrayAdapter);
-        Log.i(LOG_TAG, "setAdapter is set up ");
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ArrayAdapter<String> arraySellAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, spinnerSellArrayList);
+        arraySellAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSell.setAdapter(arraySellAdapter);
+        spinnerSell.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 itemsToSell = (Integer) parent.getItemAtPosition(position);
@@ -264,18 +258,58 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
         sellButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                completePurchase(itemsToSell, currentQuantity);
+                sellItems(itemsToSell, currentQuantity);
+            }
+        });
+
+        /**
+         *  Add items
+         */
+        ArrayList spinnerAddArrayList;
+        spinnerAddArrayList = new ArrayList<String>();
+        for (int i = 1; i <= MAX_ITEMS_TO_ADD; i++){
+            spinnerAddArrayList.add(i);
+        }
+
+        ArrayAdapter<String> arrayAddAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, spinnerAddArrayList);
+        arrayAddAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerAdd.setAdapter(arrayAddAdapter);
+        spinnerAdd.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                itemsToAdd = (Integer) parent.getItemAtPosition(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addItems(itemsToAdd, currentQuantity);
             }
         });
 
     }
 
-    private void completePurchase(int itemsToSell, int currentQuantity) {
+    private void sellItems(int itemsToSell, int currentQuantity) {
         int newQuantity = currentQuantity - itemsToSell;
+        Log.i(LOG_TAG, "sellItems newQuantity " + String.valueOf(newQuantity));
         ContentValues contentValues = new ContentValues();
         contentValues.put(InventoryEntry.COLUMN_QUANTITY, newQuantity);
         getContentResolver().update(itemUri, contentValues, null, null);
-        Log.i(LOG_TAG, "completePurcahse trying to set newQuantity as" + newQuantity);
+    }
+
+    private void addItems(int itemsToAdd, int currentQuantity) {
+        int newQuantity = currentQuantity + itemsToAdd;
+        Log.i(LOG_TAG, "addItems newQuantity " + String.valueOf(newQuantity));
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(InventoryEntry.COLUMN_QUANTITY, newQuantity);
+        getContentResolver().update(itemUri, contentValues, null, null);
     }
 
     @Override
