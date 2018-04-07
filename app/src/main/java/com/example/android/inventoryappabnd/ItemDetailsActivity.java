@@ -225,6 +225,8 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
     private void changeQuantityStock(int quantity) {
 
         final int currentQuantity = quantity;
+        addButton.setVisibility(View.VISIBLE);
+        spinnerAdd.setVisibility(View.VISIBLE);
         if (quantity != 0) {
             sellButton.setVisibility(View.VISIBLE);
             spinnerSell.setVisibility(View.VISIBLE);

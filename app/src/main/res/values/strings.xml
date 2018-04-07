@@ -10,7 +10,7 @@
     <string name="delete_all_menu_text">Delete all items</string>
     <string name="add_new_item_menu_text">Add new item</string>
     <string name="delete_item_menu_text">Delete</string>
-    <string name="save_item_menu_text">Save</string>
+    <string name="save_item_menu_text">Update metadata</string>
     <string name="error_cannot_be_empty">Cannot be empty</string>
     <string name="error_negative_value">Cannot be negative</string>
     <string name="error_not_number">Numbers only</string>

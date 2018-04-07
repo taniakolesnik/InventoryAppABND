@@ -8,7 +8,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/list_item_left_padding"
+        android:paddingRight="@dimen/list_item_right_padding"
+        android:paddingTop="@dimen/minimum_padding">
 
         <TextView
             android:layout_width="wrap_content"
@@ -23,6 +26,9 @@
     </LinearLayout>
 
     <LinearLayout
+        android:paddingLeft="@dimen/list_item_left_padding"
+        android:paddingRight="@dimen/list_item_right_padding"
+        android:paddingTop="@dimen/minimum_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -42,24 +48,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/quantity_list" />
-
-        <EditText
-            android:id="@+id/item_quantity_edit"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/list_item_left_padding"
+        android:paddingRight="@dimen/list_item_right_padding"
+        android:paddingTop="@dimen/minimum_padding">
 
         <TextView
             android:layout_width="wrap_content"
@@ -74,6 +66,9 @@
     </LinearLayout>
 
     <LinearLayout
+        android:paddingLeft="@dimen/list_item_left_padding"
+        android:paddingRight="@dimen/list_item_right_padding"
+        android:paddingTop="@dimen/minimum_padding"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
@@ -89,30 +84,81 @@
             android:layout_height="wrap_content" />
     </LinearLayout>
 
+    <LinearLayout
+        android:paddingLeft="@dimen/list_item_left_padding"
+        android:paddingRight="@dimen/list_item_right_padding"
+        android:paddingTop="@dimen/minimum_padding"
+        android:layout_marginTop="@dimen/list_item_right_padding"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/quantity_list" />
+
+        <EditText
+            android:id="@+id/item_quantity_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="56sp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:paddingLeft="@dimen/list_item_left_padding"
+        android:paddingRight="@dimen/list_item_right_padding"
+        android:paddingTop="@dimen/minimum_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <Spinner
+        android:id="@+id/spinner_item_to_add"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown"
+        android:visibility="invisible"/>
+
+    <Button
+        android:id="@+id/add_items_button"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="@string/add_button_text"
+        android:visibility="invisible"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:paddingLeft="@dimen/list_item_left_padding"
+        android:paddingRight="@dimen/list_item_right_padding"
+        android:paddingTop="@dimen/minimum_padding"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
     <Spinner
         android:id="@+id/spinner_item_to_sell"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:visibility="invisible"
         android:spinnerMode="dropdown"/>
 
     <Button
         android:id="@+id/sell_button"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content"
         android:text="@string/sell_button_text"
+        android:background="@color/colorPrimaryDark"
         android:visibility="invisible"/>
 
-    <Spinner
-        android:id="@+id/spinner_item_to_add"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dropdown"/>
-
-    <Button
-        android:id="@+id/add_items_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/add_button_text" />
+    </LinearLayout>
 
 </LinearLayout>

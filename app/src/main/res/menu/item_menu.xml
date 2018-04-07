@@ -8,5 +8,5 @@
         <item
         android:id="@+id/deleteItem_menu"
         android:title="@string/delete_item_menu_text"
-        app:showAsAction="always"/>
+        app:showAsAction="never"/>
 </menu>
