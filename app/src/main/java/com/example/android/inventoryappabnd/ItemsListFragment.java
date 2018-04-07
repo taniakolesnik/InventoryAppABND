@@ -1,6 +1,8 @@
 package com.example.android.inventoryappabnd;
 
 import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.content.ContentUris;
@@ -57,7 +59,22 @@ public class ItemsListFragment extends Fragment implements LoaderManager.LoaderC
             }
         });
 
+        FloatingActionButton floatingActionButton = rootView.findViewById(R.id.fab);
+
+
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                insertItem();
+            }
+        });
+
         return rootView;
+    }
+
+    private void insertItem() {
+        Intent intent = new Intent(getContext(), ItemDetailsActivity.class);
+        startActivity(intent);
     }
 
     @Override

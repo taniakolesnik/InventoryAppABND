@@ -1,6 +1,8 @@
 package com.example.android.inventoryappabnd;
 
 import android.content.Intent;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -10,6 +12,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.design.widget.TabLayout;
+import android.view.View;
 
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
 
@@ -28,9 +31,8 @@ public class MainActivity extends AppCompatActivity {
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.setBackgroundColor(getResources().getColor(R.color.colorAccent));
-    }
 
-    //TODO add fab icon to add new item
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -41,9 +43,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.addNew_menu:
-                insertItem();
-                break;
             case R.id.deleteAll_menu:
                 deleteAllRecords();
                 // TODO add confirmation pop up;
@@ -52,10 +51,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    private void insertItem() {
-        Intent intent = new Intent(MainActivity.this, ItemDetailsActivity.class);
-        startActivity(intent);
-    }
+
 
     private class SlideFragmentPagerAdapter extends FragmentPagerAdapter {
 

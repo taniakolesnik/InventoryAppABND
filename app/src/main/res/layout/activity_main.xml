@@ -24,8 +24,6 @@
             app:tabMode="fixed" />
     </LinearLayout>
 
-
-
     <TextView
         android:id="@+id/emptyView"
         android:layout_width="match_parent"
