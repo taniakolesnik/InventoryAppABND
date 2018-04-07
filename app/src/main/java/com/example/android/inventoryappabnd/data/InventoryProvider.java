@@ -114,7 +114,6 @@ public class InventoryProvider extends ContentProvider {
             return null;
         }
         Uri newITemUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, newItemId);
-        Toast.makeText(getContext(), "New item added. id: " + newItemId,Toast.LENGTH_SHORT).show();
         getContext().getContentResolver().notifyChange(uri, null);
         return newITemUri;
     }
