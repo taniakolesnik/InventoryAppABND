@@ -1,8 +1,6 @@
 package com.example.android.inventoryappabnd;
 
-import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.content.ContentUris;
@@ -11,12 +9,13 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,14 +26,12 @@ import butterknife.ButterKnife;
  */
 public class ItemsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
-    InventoryAdapter inventoryAdapter;
     public boolean inStock;
-
-    @BindView(R.id.list_view)
-    ListView listView;
+    InventoryAdapter inventoryAdapter;
+    @BindView(R.id.list_view) ListView listView;
+    @BindView(R.id.empty_view) TextView emptyView;
 
     public ItemsListFragment() {
-        // Required empty public constructor
     }
 
     @Override
@@ -42,9 +39,16 @@ public class ItemsListFragment extends Fragment implements LoaderManager.LoaderC
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_list_layout, container, false);
         ButterKnife.bind(this, rootView);
-        inStock = getArguments().getBoolean("inStock");
+        inStock = getArguments().getBoolean(getString(R.string.in_stock));
 
-        Log.i("mm",  String.valueOf(inStock));
+        if (!inStock) {
+            emptyView.setText(R.string.empty_list_for_soldout);
+        } else {
+            emptyView.setText(R.string.empty_list_for_available);
+        }
+
+        listView.setEmptyView(emptyView);
+
         inventoryAdapter = new InventoryAdapter(getActivity(), null);
         listView.setAdapter(inventoryAdapter);
         getLoaderManager().initLoader(1,null, this);
@@ -60,8 +64,6 @@ public class ItemsListFragment extends Fragment implements LoaderManager.LoaderC
         });
 
         FloatingActionButton floatingActionButton = rootView.findViewById(R.id.fab);
-
-
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +107,4 @@ public class ItemsListFragment extends Fragment implements LoaderManager.LoaderC
     public void onLoaderReset(Loader<Cursor> loader) {
         inventoryAdapter.swapCursor(null);
     }
-
-
 }

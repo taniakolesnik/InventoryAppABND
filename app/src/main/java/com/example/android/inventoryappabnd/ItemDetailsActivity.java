@@ -2,7 +2,6 @@ package com.example.android.inventoryappabnd;
 
 import android.app.LoaderManager;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
@@ -19,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
@@ -43,7 +43,6 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
     private int itemsToSell = 0;
     private static final int MAX_ITEMS_TO_ADD = 10;
 
-
     @BindView(R.id.item_name_edit) EditText nameEditText;
     @BindView(R.id.item_price_edit) EditText priceEditText;
     @BindView(R.id.item_quantity_edit) EditText quantityEditText;
@@ -53,7 +52,7 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
     @BindView(R.id.add_items_button) Button addButton;
     @BindView(R.id.spinner_item_to_sell) Spinner spinnerSell;
     @BindView(R.id.spinner_item_to_add) Spinner spinnerAdd;
-
+    @BindView(R.id.phone_icon) ImageView phoneImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,8 +61,6 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
         ButterKnife.bind(this);
 
         itemUri = getIntent().getData();
-        Log.i(LOG_TAG, "onCreate initiated..." + itemUri);
-
         if (itemUri != null) {
             getLoaderManager().initLoader(ITEM_LOADER_ID, null, this);
             setTitle(getString(R.string.edit_activity_title));
@@ -71,8 +68,8 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
             setTitle(getString(R.string.add_activity_title));
             invalidateOptionsMenu();
         }
-    }
 
+    }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -188,11 +185,8 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
         }
     }
 
-
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.i(LOG_TAG, "onCreateLoader initiated...");
-
         return new CursorLoader(this, itemUri,
                 null, // we want to get all info on this item
                 null,
@@ -202,15 +196,15 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-
         int quantity = 0;
+        String supplierContact = "";
 
         if (data.moveToFirst()) {
             String name = data.getString(data.getColumnIndex(InventoryEntry.COLUMN_PRODUCT_NAME));
             quantity = data.getInt(data.getColumnIndex(InventoryEntry.COLUMN_QUANTITY));
             int price = data.getInt(data.getColumnIndex(InventoryEntry.COLUMN_PRICE));
             String supplier = data.getString(data.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_NAME));
-            String supplierContact = data.getString(data.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_PHONE));
+            supplierContact = data.getString(data.getColumnIndex(InventoryEntry.COLUMN_SUPPLIER_PHONE));
 
             nameEditText.setText(name);
             priceEditText.setText(String.valueOf(price));
@@ -219,10 +213,32 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
             supplierContactEditText.setText(supplierContact);
         }
 
-            changeQuantityStock(quantity);
+            prepareQuantityChange(quantity);
+            preparePhoneCall(supplierContact);
     }
 
-    private void changeQuantityStock(int quantity) {
+    private void preparePhoneCall(String phoneNumber) {
+        final String mPhoneNumber = phoneNumber;
+
+        if (!TextUtils.isEmpty(phoneNumber)){
+            phoneImageView.setVisibility(View.VISIBLE);
+        }
+        phoneImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_CALL);
+                    intent.setData(Uri.parse("tel:" + mPhoneNumber));
+                    startActivity(intent);
+                } catch (SecurityException e) {
+                    Log.e(LOG_TAG, "SecurityException ", e);
+                }
+            }
+        });
+
+    }
+
+    private void prepareQuantityChange(int quantity) {
 
         final int currentQuantity = quantity;
         addButton.setVisibility(View.VISIBLE);
@@ -300,7 +316,6 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
 
     private void sellItems(int itemsToSell, int currentQuantity) {
         int newQuantity = currentQuantity - itemsToSell;
-        Log.i(LOG_TAG, "sellItems newQuantity " + String.valueOf(newQuantity));
         ContentValues contentValues = new ContentValues();
         contentValues.put(InventoryEntry.COLUMN_QUANTITY, newQuantity);
         getContentResolver().update(itemUri, contentValues, null, null);
@@ -308,7 +323,6 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
 
     private void addItems(int itemsToAdd, int currentQuantity) {
         int newQuantity = currentQuantity + itemsToAdd;
-        Log.i(LOG_TAG, "addItems newQuantity " + String.valueOf(newQuantity));
         ContentValues contentValues = new ContentValues();
         contentValues.put(InventoryEntry.COLUMN_QUANTITY, newQuantity);
         getContentResolver().update(itemUri, contentValues, null, null);

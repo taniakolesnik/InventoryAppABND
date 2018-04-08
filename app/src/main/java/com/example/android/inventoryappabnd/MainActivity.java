@@ -1,8 +1,5 @@
 package com.example.android.inventoryappabnd;
 
-import android.content.Intent;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -12,8 +9,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.support.design.widget.TabLayout;
-import android.view.View;
-
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
 
 public class MainActivity extends AppCompatActivity {
@@ -45,13 +40,14 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.deleteAll_menu:
                 deleteAllRecords();
-                // TODO add confirmation pop up;
                 break;
         }
         return true;
     }
 
-
+    private void deleteAllRecords() {
+        getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
+    }
 
     private class SlideFragmentPagerAdapter extends FragmentPagerAdapter {
 
@@ -66,10 +62,10 @@ public class MainActivity extends AppCompatActivity {
             Bundle args = new Bundle();
             switch (position) {
                 case 0:
-                    args.putBoolean("inStock", true);
+                    args.putBoolean(getString(R.string.in_stock), true);
                     break;
                 case 1:
-                    args.putBoolean("inStock", false);
+                    args.putBoolean(getString(R.string.in_stock), false);
                     break;
                 default:
                     return null;
@@ -88,17 +84,13 @@ public class MainActivity extends AppCompatActivity {
             String tabName = "";
             switch (position) {
                 case 0:
-                    tabName = "Available";
+                    tabName = getString(R.string.tab_name_available);
                     break;
                 case 1:
-                    tabName = "Sold out";
+                    tabName = getString(R.string.tab_name_soldout);;
                     break;
             }
             return tabName;
         }
-    }
-
-    private void deleteAllRecords() {
-        getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
     }
 }

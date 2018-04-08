@@ -10,9 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CursorAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
 
@@ -43,13 +41,15 @@ class InventoryAdapter extends CursorAdapter{
         TextView nameView = view.findViewById(R.id.item_name_view);
         TextView detailsView = view.findViewById(R.id.details_view);
         Button button = view.findViewById(R.id.sell_one_button);
+        if (quantity == 0){
+            button.setVisibility(View.GONE);
+        }
 
         nameView.setBackgroundResource(R.color.colorName);
         detailsView.setBackgroundResource(R.color.colorDetails);
 
         nameView.setText(name);
-        detailsView.setText(context.getString(R.string.quantity_list) + quantity + " "
-                + context.getString(R.string.price_list) + price);
+        detailsView.setText(context.getString(R.string.quantity_list) + quantity + " " + context.getString(R.string.price_list) + price);
 
         final Uri itemUri = ContentUris.withAppendedId(InventoryEntry.CONTENT_URI, id);
         final int quantityAfterOneItemSell = quantity - 1;
@@ -62,8 +62,6 @@ class InventoryAdapter extends CursorAdapter{
                 context.getContentResolver().update(itemUri, contentValues, null, null);
             }
         });
-
-
 
     }
 

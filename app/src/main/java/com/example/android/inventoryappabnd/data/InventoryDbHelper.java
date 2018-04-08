@@ -13,18 +13,13 @@ import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntr
 
 public class InventoryDbHelper extends SQLiteOpenHelper {
 
-    public static final String LOG_TAG = InventoryDbHelper.class.getName();
-
     private final static String DATABASE_NAME = "InventoryRecords";
     private final static int DATABASE_VERSION = 1;
-
-
-    private final String COMMA = " , ";
     private static final String INTEGER_DEFAULT_0 = " INTEGER DEFAULT 0";
     private static final String INTEGER_PRIMARY_KEY_AUTOINCREMENT = " INTEGER PRIMARY KEY AUTOINCREMENT";
     private static final String TEXT = " TEXT";
     private static final String TEXT_NOT_NULL = " TEXT NOT NULL";
-
+    private final String COMMA = " , ";
     private final String SQL_CREATE_INVENTORY_TABLE = "CREATE TABLE "
             + InventoryEntry.TABLE_NAME + "( "
             + InventoryEntry._ID + INTEGER_PRIMARY_KEY_AUTOINCREMENT + COMMA
@@ -41,7 +36,6 @@ public class InventoryDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(SQL_CREATE_INVENTORY_TABLE);
-        Log.i(LOG_TAG, "createTableQueary is " + SQL_CREATE_INVENTORY_TABLE);
     }
 
     @Override

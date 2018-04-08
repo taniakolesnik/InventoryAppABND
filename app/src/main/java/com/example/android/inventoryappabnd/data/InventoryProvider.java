@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.android.inventoryappabnd.R;
 import com.example.android.inventoryappabnd.data.InventoryContract.InventoryEntry;
@@ -44,7 +43,6 @@ public class InventoryProvider extends ContentProvider {
         SQLiteDatabase sqLiteDatabase = inventoryDbHelper.getReadableDatabase();
         Cursor cursor;
         int match = uriMatcher.match(uri);
-        Log.i(LOG_TAG, "query match id = " + match );
         switch (match){
             case INVENTORY_ITEM_ID:
                 selection = InventoryEntry._ID + "=?";

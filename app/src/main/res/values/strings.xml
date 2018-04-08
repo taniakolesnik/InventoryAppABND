@@ -18,4 +18,10 @@
     <string name="add_activity_title">Add</string>
     <string name="sell_button_text">Confirm sell</string>
     <string name="add_button_text">Confirm news items arrived</string>
+    <string name="empty_list_for_available">List is empty. Please stast adding content</string>
+    <string name="empty_list_for_soldout">List is empty</string>
+    <string name="in_stock">inStock</string>
+    <string name="tab_name_available">Available</string>
+    <string name="tab_name_soldout">Sold Out</string>
+    <string name="sell_one_button">Sell one</string>
 </resources>
