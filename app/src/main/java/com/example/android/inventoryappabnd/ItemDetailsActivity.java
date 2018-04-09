@@ -1,13 +1,17 @@
 package com.example.android.inventoryappabnd;
 
+import android.Manifest;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -36,6 +40,7 @@ import butterknife.ButterKnife;
 public class ItemDetailsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor>{
 
     public static final String LOG_TAG = ItemDetailsActivity.class.getName();
+    private int MY_PERMISSIONS_REQUEST_CALL_PHONE;
 
     Uri itemUri;
     private static final int ITEM_LOADER_ID = 1;
@@ -218,22 +223,38 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
     }
 
     private void preparePhoneCall(String phoneNumber) {
+
+
         final String mPhoneNumber = phoneNumber;
 
         if (!TextUtils.isEmpty(phoneNumber)){
             phoneImageView.setVisibility(View.VISIBLE);
         }
+
+
         phoneImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    Intent intent = new Intent(Intent.ACTION_CALL);
-                    intent.setData(Uri.parse("tel:" + mPhoneNumber));
-                    startActivity(intent);
-                } catch (SecurityException e) {
-                    Log.e(LOG_TAG, "SecurityException ", e);
+
+                if (ContextCompat.checkSelfPermission(ItemDetailsActivity.this,
+                        Manifest.permission.CALL_PHONE)
+                        != PackageManager.PERMISSION_GRANTED) {
+
+                    ActivityCompat.requestPermissions(ItemDetailsActivity.this,
+                            new String[]{Manifest.permission.CALL_PHONE},
+                            MY_PERMISSIONS_REQUEST_CALL_PHONE);
+                    Log.i(LOG_TAG, "MY_PERMISSIONS_REQUEST_CALL_PHONE is " + String.valueOf(MY_PERMISSIONS_REQUEST_CALL_PHONE) );
+                } else {
+                    try {
+                        Intent intent = new Intent(Intent.ACTION_CALL);
+                        intent.setData(Uri.parse("tel:" + mPhoneNumber));
+                        startActivity(intent);
+                    } catch (SecurityException e) {
+                        Log.e(LOG_TAG, "SecurityException ", e);
+                    }
                 }
-            }
+
+                }
         });
 
     }
