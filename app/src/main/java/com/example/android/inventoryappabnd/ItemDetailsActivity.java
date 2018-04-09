@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
@@ -12,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -99,11 +101,29 @@ public class ItemDetailsActivity extends AppCompatActivity implements LoaderMana
                 saveItem();
                 break;
             case R.id.deleteItem_menu:
-                deleteRecord();
-                // TODO add confirmation pop up;
+                showDeleteDialogConfirmation();
                 break;
         }
         return true;
+    }
+
+    private void showDeleteDialogConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(ItemDetailsActivity.this);
+        builder.setMessage(R.string.delete_dialog_text)
+                .setPositiveButton(R.string.delete_dialog_text_positive, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteRecord();
+                    }
+                })
+                .setNegativeButton(R.string.delete_dialog_text_negative, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+        builder.create();
+        builder.show();
     }
 
     private void deleteRecord() {

@@ -24,4 +24,10 @@
     <string name="tab_name_available">Available</string>
     <string name="tab_name_soldout">Sold Out</string>
     <string name="sell_one_button">Sell one</string>
+    <string name="delete_all_dialog_text">Delete all records?</string>
+    <string name="delete_all_dialog_text_positive">Yes</string>
+    <string name="delete_all_dialog_text_negative">No</string>
+    <string name="delete_dialog_text">Delete this record?</string>
+    <string name="delete_dialog_text_positive">Yes</string>
+    <string name="delete_dialog_text_negative">No</string>
 </resources>

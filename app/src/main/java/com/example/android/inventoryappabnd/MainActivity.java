@@ -1,9 +1,11 @@
 package com.example.android.inventoryappabnd;
 
+import android.content.DialogInterface;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -21,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         viewPager = (ViewPager) findViewById(R.id.view_pager);
-        viewPager.setAdapter(new SlideFragmentPagerAdapter(getSupportFragmentManager()));
+        viewPager.setAdapter(new SlideFragmentPagerAdapter(getSupportFragmentManager(), getApplicationContext()));
 
         final TabLayout tabLayout = (TabLayout) findViewById(R.id.tab_layout);
         tabLayout.setupWithViewPager(viewPager);
@@ -39,58 +41,34 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.deleteAll_menu:
-                deleteAllRecords();
+                showDeleteAllDialogConfirmation();
                 break;
         }
         return true;
+    }
+
+    private void showDeleteAllDialogConfirmation() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage(R.string.delete_all_dialog_text)
+                .setPositiveButton(R.string.delete_all_dialog_text_positive, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        deleteAllRecords();
+                    }
+                })
+                .setNegativeButton(R.string.delete_all_dialog_text_negative, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+         builder.create();
+         builder.show();
     }
 
     private void deleteAllRecords() {
         getContentResolver().delete(InventoryEntry.CONTENT_URI, null, null);
     }
 
-    private class SlideFragmentPagerAdapter extends FragmentPagerAdapter {
 
-
-        public SlideFragmentPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            Fragment fragment = new ItemsListFragment();
-            Bundle args = new Bundle();
-            switch (position) {
-                case 0:
-                    args.putBoolean(getString(R.string.in_stock), true);
-                    break;
-                case 1:
-                    args.putBoolean(getString(R.string.in_stock), false);
-                    break;
-                default:
-                    return null;
-            }
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            String tabName = "";
-            switch (position) {
-                case 0:
-                    tabName = getString(R.string.tab_name_available);
-                    break;
-                case 1:
-                    tabName = getString(R.string.tab_name_soldout);;
-                    break;
-            }
-            return tabName;
-        }
-    }
 }
